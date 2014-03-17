@@ -23,6 +23,16 @@
 	width: 50px;
 }
 
+#board .column.hover {
+	background: #efefef;
+}
+
+#board .column.selected {
+	-webkit-box-shadow: inset 0 0 10px #dd00dd;
+	-moz-box-shadow: inset 0 0 10px #dd00dd;
+	box-shadow: inset 0 0 6px #00ffff;
+}
+
 #board .column .WHITE_KING {
 	background: url('../images/wKing.png');
 }

@@ -27,13 +27,14 @@ function drawBoard(board) {
 		str += '<div class="row">';
 		for (var j=0; j<8; j++) {
 			str += '<div class="column ' + 
-			((i+j)%2===0?'light':'dark') + '"">' +
-			'<div class="' + getPieceName(board[i][j]) + '"></div>' + 
+			((i+j)%2===0?'light':'dark') + '">' +
+			'<div class="' + getPieceName(board[i][j]) + 
+			'" row=' + i + ' col=' + j + '></div>' + 
 			'</div>';
 		}
 		str += '</div>';
 	}
-	$('#board').append(str);
+	$('#board').html(str);
 }
 
 function getPieceName(peiceValue) {
@@ -56,21 +57,34 @@ function getPieceName(peiceValue) {
 	}
 }
 
+function psuedo_legal(from)
+
 var background_color;
 var selected_color;
+var selected_x;
+var selected_y;
+var selected = false;
 
-$(function() {
+function refreshPage() {
 	drawBoard(board);
 	$('.column').hover(function() {
-		background_color = $(this).css('background');
-		$(this).css('background', '#b93939');
+		$(this).addClass('hover');
 	}, function() {
-		if(!$(this).hasClass('selected'))
-			$(this).css('background', background_color);
+		$(this).removeClass('hover');
 	});
 	$('.column').click(function() {
-		selected_color = $(this).css('background');
-		$(this).css('background', '#bbbb00');
-		$(this).addClass('selected')
-	})
-});
+		if(!selected) {
+			$(this).addClass('selected');
+			selected = true;
+			selected_x = parseInt($(this).children(':first').attr('col'));
+			selected_y = parseInt($(this).children(':first').attr('row'));
+		} else {
+			board[$(this).children(':first').attr('row')][$(this).children(':first').attr('col')] = board[selected_y][selected_x];
+			board[selected_y][selected_x] = 0;
+			selected = false;
+			refreshPage();
+		}
+	});
+}
+
+$(refreshPage);
